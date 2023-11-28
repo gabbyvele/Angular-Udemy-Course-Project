@@ -1,33 +1,34 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light mb-2">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">Recipe Book</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
-            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation"
-            (click)="collapsed = !collapsed">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup"
-         [class.collapse]="collapsed"
-         (window:resize)="collapsed = true">
-      <div class="navbar-nav me-auto mb-2 mb-lg-0">
-        <a class="nav-link" href="#" (click)="onSelect('Recipe')">Recipes</a>
-        <a class="nav-link" href="#" (click)="onSelect('Shopping')">Shopping List</a>
-      </div>
-      <div class="navbar-nav ms-auto">
-        <div class="nav-item dropdown me-2" appDropdown>
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
-             aria-expanded="false">
-            Manage
-          </a>
-          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="#">Save Data</a></li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-            <li><a class="dropdown-item" href="#">Fetch Data</a></li>
-          </ul>
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Recipe Book</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation"
+                (click)="collapsed = !collapsed">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup"
+             [class.collapse]="collapsed"
+             (window:resize)="collapsed = true">
+            <div class="navbar-nav me-auto mb-2 mb-lg-0">
+                <a class="nav-link" routerLinkActive="active" routerLink="/recipes">Recipes</a>
+                <a class="nav-link" routerLinkActive="active" routerLink="/shopping-list">Shopping List</a>
+            </div>
+            <div class="navbar-nav ms-auto">
+                <div class="nav-item dropdown me-2" appDropdown>
+                    <a class="nav-link dropdown-toggle" style="cursor: pointer" id="navbarDropdown" role="button"
+                       data-bs-toggle="dropdown"
+                       aria-expanded="false">
+                        Manage
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" style="cursor: pointer">Save Data</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item" style="cursor: pointer">Fetch Data</a></li>
+                    </ul>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 </nav>
