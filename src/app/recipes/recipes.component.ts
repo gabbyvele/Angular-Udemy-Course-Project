@@ -9,11 +9,11 @@ import {Subscription} from "rxjs";
     styleUrls: ['./recipes.component.css']
 })
 export class RecipesComponent implements OnInit, OnDestroy {
+
     selectedRecipe: Recipe;
     private recipeSelectedSubscription: Subscription;
 
     constructor(private recipeService: RecipeService) {
-
     }
 
     ngOnInit(): void {

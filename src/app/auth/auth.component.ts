@@ -1,11 +1,11 @@
-import {Component, ComponentFactoryResolver, OnDestroy, ViewChild} from '@angular/core';
+import {Component, ComponentFactoryResolver, inject, OnDestroy, ViewChild} from '@angular/core';
 import {NgForm} from "@angular/forms";
 import {AuthService} from "./auth.service";
 import {Observable, Subscription} from 'rxjs';
 import {AuthResponse} from "../model/auth-response.model";
 import {Router} from "@angular/router";
 import {AlertComponent} from "../shared/alert/alert.component";
-import {PlaceholderDirective} from "../directives/placeholder.directive";
+import {PlaceholderDirective} from "../shared/directives/placeholder.directive";
 
 @Component({
     selector: 'app-auth',
@@ -19,9 +19,10 @@ export class AuthComponent implements OnDestroy {
     error: string = null;
     @ViewChild(PlaceholderDirective, {static: false}) modalHost: PlaceholderDirective;
     private closeSubscription: Subscription;
+    // Worth considering to inject instead of constructor method
+    private authService = inject(AuthService);
 
-    constructor(private authService: AuthService,
-                private router: Router,
+    constructor(private router: Router,
                 private componentFactoryResolver: ComponentFactoryResolver) {
     }
 
