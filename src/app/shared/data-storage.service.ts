@@ -1,19 +1,25 @@
 import {Injectable} from "@angular/core";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
 import {RecipeService} from "../recipes/recipe.service";
 import {Recipe} from "../model/recipe.model";
-import {map, tap} from "rxjs/operators";
+import {exhaustMap, map, take, tap} from "rxjs/operators";
+import {AuthService} from "../auth/auth.service";
 
 @Injectable({providedIn: 'root'})
 export class DataStorageService {
 
-    constructor(private httpClient: HttpClient, private recipeService: RecipeService) {
+    private saveUrl = 'https://ng-gyv-course-recipe-book-default-rtdb.firebaseio.com/recipes.json';
+    private getUrl = 'https://ng-gyv-course-recipe-book-default-rtdb.firebaseio.com/recipes.json';
+
+    constructor(private httpClient: HttpClient,
+                private recipeService: RecipeService,
+                private authService: AuthService) {
     }
 
     saveRecipes() {
         const recipes = this.recipeService.getRecipes();
         return this.httpClient
-            .put('https://ng-gyv-course-recipe-book-default-rtdb.firebaseio.com/recipes.json', recipes)
+            .put(this.saveUrl, recipes)
             .subscribe(response => {
                 console.log(response)
             })

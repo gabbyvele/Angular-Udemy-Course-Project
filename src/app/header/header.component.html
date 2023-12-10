@@ -10,11 +10,13 @@
              [class.collapse]="collapsed"
              (window:resize)="collapsed = true">
             <div class="navbar-nav me-auto mb-2 mb-lg-0">
-                <a class="nav-link" routerLinkActive="active" routerLink="/recipes">Recipes</a>
+                <a class="nav-link" routerLinkActive="active" routerLink="/recipes" *ngIf="isAuthenticated">Recipes</a>
                 <a class="nav-link" routerLinkActive="active" routerLink="/shopping-list">Shopping List</a>
             </div>
             <div class="navbar-nav ms-auto">
-                <div class="nav-item dropdown me-2" appDropdown>
+                <a class="nav-link" routerLinkActive="active" routerLink="/auth" *ngIf="!isAuthenticated">Login</a>
+                <a class="nav-link" routerLinkActive="active" *ngIf="isAuthenticated" (click)="onLogout()">Logout</a>
+                <div class="nav-item dropdown me-2" appDropdown *ngIf="isAuthenticated">
                     <a class="nav-link dropdown-toggle" style="cursor: pointer" id="navbarDropdown" role="button"
                        data-bs-toggle="dropdown"
                        aria-expanded="false">
