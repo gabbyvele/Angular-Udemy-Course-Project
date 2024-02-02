@@ -1,7 +1,6 @@
 import {Recipe} from "../model/recipe.model";
 import {inject, Injectable} from "@angular/core";
 import {Ingredient} from "../model/ingredient.model";
-import {ShoppingListService} from "../shopping-list/shopping-list.service";
 import {Subject} from "rxjs";
 import {Store} from "@ngrx/store";
 import {addIngredient, addIngredients} from "../shopping-list/store/shopping-list.actions";
@@ -33,9 +32,6 @@ export class RecipeService {
   //         ]),
   // ];
   private recipes: Recipe [] = [];
-
-  constructor(private slService: ShoppingListService) {
-  }
 
   getRecipes(): Recipe[] {
     return this.recipes.slice();

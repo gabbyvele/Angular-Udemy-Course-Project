@@ -8,7 +8,6 @@ import {
   stopEdit,
   updateIngredient
 } from "./shopping-list.actions";
-import {ShoppingListService} from "../shopping-list.service";
 
 export interface State {
   ingredients: Ingredient[];

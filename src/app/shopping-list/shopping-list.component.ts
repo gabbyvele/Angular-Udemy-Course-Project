@@ -1,6 +1,5 @@
 import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {Ingredient} from "../model/ingredient.model";
-import {ShoppingListService} from "./shopping-list.service";
 import {Observable, Subscription} from "rxjs";
 import {LoggingService} from "../logging.service";
 import {Store} from "@ngrx/store";
@@ -18,8 +17,7 @@ export class ShoppingListComponent implements OnInit, OnDestroy {
   // private ingredientsChangeSubscription: Subscription;
   private store: Store<AppState> = inject(Store);
 
-  constructor(private shoppingListService: ShoppingListService,
-              private loggingService: LoggingService) {
+  constructor(private loggingService: LoggingService) {
   }
 
   ngOnInit(): void {

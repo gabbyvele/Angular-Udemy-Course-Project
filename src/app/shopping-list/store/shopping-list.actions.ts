@@ -22,7 +22,7 @@ export const deleteIngredient = createAction(
 
 export const startEdit = createAction(
   '[Ingredient] Start Edit',
-  props<{ index:number }>()
+  props<{ index: number }>()
 )
 
 export const stopEdit = createAction(
