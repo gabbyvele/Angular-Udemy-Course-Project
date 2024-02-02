@@ -1,67 +1,72 @@
 import {Recipe} from "../model/recipe.model";
-import {Injectable} from "@angular/core";
+import {inject, Injectable} from "@angular/core";
 import {Ingredient} from "../model/ingredient.model";
 import {ShoppingListService} from "../shopping-list/shopping-list.service";
 import {Subject} from "rxjs";
+import {Store} from "@ngrx/store";
+import {addIngredient, addIngredients} from "../shopping-list/store/shopping-list.actions";
+import {AppState} from "../shopping-list/store/shopping-list.reducer";
 
 @Injectable()
 export class RecipeService {
-    recipeSelected = new Subject<Recipe>();
-    recipeChanged = new Subject<Recipe[]>();
+  recipeSelected = new Subject<Recipe>();
+  recipeChanged = new Subject<Recipe[]>();
+  private store: Store<AppState> = inject(Store);
 
-    // private recipes: Recipe [] = [
-    //     new Recipe(
-    //         "Pap",
-    //         "How to make Pap",
-    //         "https://www.unileverfoodsolutions.co.za/dam/global-ufs/mcos/SOUTH-AFRICA/calcmenu/recipes/ZA-recipes/refresh-deli-q1/stiff-pap-main-header.jpg",
-    //         [
-    //             new Ingredient("Maize", 1),
-    //             new Ingredient("Water", 1)
-    //         ]),
-    //     new Recipe(
-    //         "Rice",
-    //         "How to make Rice",
-    //         "https://cdn12.picryl.com/photo/2016/12/31/rice-ball-food-diet-food-drink-f9306f-1024.jpg",
-    //         [
-    //             new Ingredient("Rice", 1),
-    //             new Ingredient("Water", 1),
-    //             new Ingredient("Salt", 1)
-    //         ]),
-    // ];
-    private recipes: Recipe [] = [];
+  // private recipes: Recipe [] = [
+  //     new Recipe(
+  //         "Pap",
+  //         "How to make Pap",
+  //         "https://www.unileverfoodsolutions.co.za/dam/global-ufs/mcos/SOUTH-AFRICA/calcmenu/recipes/ZA-recipes/refresh-deli-q1/stiff-pap-main-header.jpg",
+  //         [
+  //             new Ingredient("Maize", 1),
+  //             new Ingredient("Water", 1)
+  //         ]),
+  //     new Recipe(
+  //         "Rice",
+  //         "How to make Rice",
+  //         "https://cdn12.picryl.com/photo/2016/12/31/rice-ball-food-diet-food-drink-f9306f-1024.jpg",
+  //         [
+  //             new Ingredient("Rice", 1),
+  //             new Ingredient("Water", 1),
+  //             new Ingredient("Salt", 1)
+  //         ]),
+  // ];
+  private recipes: Recipe [] = [];
 
-    constructor(private slService: ShoppingListService) {
-    }
+  constructor(private slService: ShoppingListService) {
+  }
 
-    getRecipes(): Recipe[] {
-        return this.recipes.slice();
-    }
+  getRecipes(): Recipe[] {
+    return this.recipes.slice();
+  }
 
-    setRecipes(recipes: Recipe[]) {
-        this.recipes = recipes;
-        this.recipeChanged.next(this.recipes.slice());
-    }
+  setRecipes(recipes: Recipe[]) {
+    this.recipes = recipes;
+    this.recipeChanged.next(this.recipes.slice());
+  }
 
-    addToShoppingList(ingredients: Ingredient[]) {
-        this.slService.addIngredients(ingredients);
-    }
+  addToShoppingList(ingredients: Ingredient[]) {
+    // this.slService.addIngredients(ingredients);
+    this.store.dispatch(addIngredients({ingredients}));
+  }
 
-    getRecipeById(id: number) {
-        return this.recipes.slice()[id];
-    }
+  getRecipeById(id: number) {
+    return this.recipes.slice()[id];
+  }
 
-    addRecipe(recipe: Recipe) {
-        this.recipes.push(recipe);
-        this.recipeChanged.next(this.recipes.slice());
-    }
+  addRecipe(recipe: Recipe) {
+    this.recipes.push(recipe);
+    this.recipeChanged.next(this.recipes.slice());
+  }
 
-    updateRecipe(id, to: Recipe) {
-        this.recipes[id] = to;
-        this.recipeChanged.next(this.recipes.slice());
-    }
+  updateRecipe(id, to: Recipe) {
+    this.recipes[id] = to;
+    this.recipeChanged.next(this.recipes.slice());
+  }
 
-    deleteRecipe(id: number) {
-        this.recipes.splice(id, 1);
-        this.recipeChanged.next(this.recipes.slice());
-    }
+  deleteRecipe(id: number) {
+    this.recipes.splice(id, 1);
+    this.recipeChanged.next(this.recipes.slice());
+  }
 }

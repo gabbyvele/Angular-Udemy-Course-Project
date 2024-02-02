@@ -8,16 +8,16 @@ import {SharedModule} from "../shared/shared.module";
 import {LoggingService} from "../logging.service";
 
 @NgModule({
-    declarations: [
-        ShoppingListComponent,
-        ShoppingEditComponent
-    ],
-    imports: [
-        RouterModule,
-        SharedModule,
-        FormsModule,
-        ShoppingListRoutingModule
-    ]
+  declarations: [
+    ShoppingListComponent,
+    ShoppingEditComponent
+  ],
+  imports: [
+    RouterModule,
+    SharedModule,
+    FormsModule,
+    ShoppingListRoutingModule
+  ]
 })
 export class ShoppingListModule {
 
