@@ -3,8 +3,8 @@ import {Ingredient} from "../model/ingredient.model";
 import {Observable, Subscription} from "rxjs";
 import {LoggingService} from "../logging.service";
 import {Store} from "@ngrx/store";
-import {AppState} from "./store/shopping-list.reducer";
 import {startEdit} from "./store/shopping-list.actions";
+import {AppState} from "../store/app.reducer";
 
 @Component({
   selector: 'app-shopping-list',

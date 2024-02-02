@@ -3,11 +3,12 @@ import {inject, Injectable} from "@angular/core";
 import {Ingredient} from "../model/ingredient.model";
 import {Subject} from "rxjs";
 import {Store} from "@ngrx/store";
-import {addIngredient, addIngredients} from "../shopping-list/store/shopping-list.actions";
-import {AppState} from "../shopping-list/store/shopping-list.reducer";
+import {addIngredients} from "../shopping-list/store/shopping-list.actions";
+import {AppState} from "../store/app.reducer";
 
 @Injectable()
 export class RecipeService {
+
   recipeSelected = new Subject<Recipe>();
   recipeChanged = new Subject<Recipe[]>();
   private store: Store<AppState> = inject(Store);
