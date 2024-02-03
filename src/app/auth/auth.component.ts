@@ -1,87 +1,89 @@
-import {Component, ComponentFactoryResolver, inject, OnDestroy, ViewChild} from '@angular/core';
+import {Component, ComponentFactoryResolver, inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {NgForm} from "@angular/forms";
-import {AuthService} from "./auth.service";
 import {Observable, Subscription} from 'rxjs';
 import {AuthResponse} from "../model/auth-response.model";
-import {Router} from "@angular/router";
 import {AlertComponent} from "../shared/alert/alert.component";
 import {PlaceholderDirective} from "../shared/directives/placeholder.directive";
+import {Store} from "@ngrx/store";
+import {clearError, loginStart, signupStart} from "./store/auth.action";
 
+// noinspection AngularMissingOrInvalidDeclarationInModule
 @Component({
-    selector: 'app-auth',
-    templateUrl: './auth.component.html',
-    styleUrls: ['./auth.component.css']
+  selector: 'app-auth',
+  templateUrl: './auth.component.html',
+  styleUrls: ['./auth.component.css']
 })
-export class AuthComponent implements OnDestroy {
+export class AuthComponent implements OnInit, OnDestroy {
 
-    isLoginMode = true;
-    isLoadingMode = false;
-    error: string = null;
-    @ViewChild(PlaceholderDirective, {static: false}) modalHost: PlaceholderDirective;
-    private closeSubscription: Subscription;
-    // Worth considering to inject instead of constructor method
-    private authService = inject(AuthService);
+  isLoginMode = true;
+  isLoadingMode = false;
+  error: string = null;
+  @ViewChild(PlaceholderDirective, {static: false}) modalHost: PlaceholderDirective;
+  private closeSubscription: Subscription;
+  private storeSub: Subscription;
+  private store = inject(Store);
 
-    constructor(private router: Router,
-                private componentFactoryResolver: ComponentFactoryResolver) {
+  constructor(private componentFactoryResolver: ComponentFactoryResolver) {
+  }
+
+  ngOnInit(): void {
+    this.storeSub = this.store.select('auth').subscribe(authState => {
+      this.isLoadingMode = authState.loading;
+      this.error = authState.authError;
+      if (this.error) {
+        this.showAlertModal("An error during login occurred");
+      }
+    });
+  }
+
+  onSwitchMode() {
+    this.isLoginMode = !this.isLoginMode;
+  }
+
+  onSubmit(authForm: NgForm) {
+    if (!authForm.valid) {
+      return;
     }
 
-    onSwitchMode() {
-        this.isLoginMode = !this.isLoginMode;
+    let authObservable: Observable<AuthResponse>;
+    // this.isLoadingMode = true;
+
+    if (this.isLoginMode) {
+      // authObservable = this.authService.login(authForm.value.email, authForm.value.password);
+      this.store.dispatch(loginStart({email: authForm.value.email, password: authForm.value.password}))
+    } else {
+      this.store.dispatch(signupStart({email: authForm.value.email, password: authForm.value.password}))
     }
 
-    onSubmit(authForm: NgForm) {
-        if (!authForm.valid) {
-            return;
-        }
+    authForm.reset();
+    this.clearError();
+  }
 
-        let authObservable: Observable<AuthResponse>;
-        this.isLoadingMode = true;
+  clearError() {
+    this.store.dispatch(clearError());
+  }
 
-        if (this.isLoginMode) {
-            authObservable = this.authService.login(authForm.value.email, authForm.value.password);
-        } else {
-            authObservable = this.authService.signUp(authForm.value.email, authForm.value.password);
-        }
+  showAlertModal(errorMessage: string) {
+    const modalFactory = this.componentFactoryResolver.resolveComponentFactory(AlertComponent);
 
-        authObservable.subscribe(
-            response => {
-                console.log(response);
-                this.isLoadingMode = false;
-                this.router.navigate(['/recipes'])
-            },
-            errorMessage => {
-                console.log(errorMessage);
-                this.error = errorMessage;
-                this.isLoadingMode = false;
-                this.showAlertModal(errorMessage);
-            }
-        );
+    const hostViewContainerRef = this.modalHost.viewContainerRef;
+    hostViewContainerRef.clear();
 
-        authForm.reset();
+    const componentRef = hostViewContainerRef.createComponent(modalFactory);
+    componentRef.instance.message = errorMessage;
+    this.closeSubscription = componentRef.instance.closeEvent.subscribe(() => {
+      this.closeSubscription.unsubscribe();
+      hostViewContainerRef.clear();
+    })
+  }
+
+  ngOnDestroy(): void {
+    if (this.closeSubscription) {
+      this.closeSubscription.unsubscribe();
     }
 
-    clearError() {
-        this.error = null;
+    if (this.storeSub) {
+      this.storeSub.unsubscribe();
     }
-
-    showAlertModal(errorMessage: string) {
-        const modalFactory = this.componentFactoryResolver.resolveComponentFactory(AlertComponent);
-
-        const hostViewContainerRef = this.modalHost.viewContainerRef;
-        hostViewContainerRef.clear();
-
-        const componentRef = hostViewContainerRef.createComponent(modalFactory);
-        componentRef.instance.message = errorMessage;
-        this.closeSubscription = componentRef.instance.closeEvent.subscribe(() => {
-            this.closeSubscription.unsubscribe();
-            hostViewContainerRef.clear();
-        })
-    }
-
-    ngOnDestroy(): void {
-        if (this.closeSubscription) {
-            this.closeSubscription.unsubscribe();
-        }
-    }
+  }
 }
