@@ -30,7 +30,8 @@ export class AuthEffects {
       email: email,
       id: localId,
       token: idToken,
-      tokenExpirationDate: expirationDate
+      tokenExpirationDate: expirationDate,
+      redirect: true
     });
   };
 
@@ -120,7 +121,8 @@ export class AuthEffects {
             email: userData.email,
             id: loadedUser.id,
             token: loadedUser.getToken(),
-            tokenExpirationDate: userData._tokenExpirationDate
+            tokenExpirationDate: userData._tokenExpirationDate,
+            redirect: false
           });
         }
 
@@ -142,8 +144,10 @@ export class AuthEffects {
   authRedirect = createEffect(() =>
       this.actions$.pipe(
         ofType(authenticateSuccess),
-        tap(() => {
-          this.router.navigate(['/']);
+        tap(authenticateSuccessAction => {
+          if (authenticateSuccessAction.redirect) {
+            this.router.navigate(['/']);
+          }
         })
       ),
     {dispatch: false});
