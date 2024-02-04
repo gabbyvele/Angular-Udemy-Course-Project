@@ -1,11 +1,10 @@
 import {Component, inject, Inject, OnDestroy, OnInit} from '@angular/core';
 import {Recipe} from "../../model/recipe.model";
-import {RecipeService} from "../recipe.service";
 import {ActivatedRoute, Params, Router} from "@angular/router";
 import {FormArray, FormControl, FormGroup, Validators} from "@angular/forms";
 import {Store} from "@ngrx/store";
 import {AppState} from "../../store/app.reducer";
-import {map, switchMap} from "rxjs/operators";
+import {map} from "rxjs/operators";
 import {addRecipe, updateRecipe} from "../store/recipe.actions";
 import {Subscription} from "rxjs";
 
@@ -23,8 +22,7 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
   private store: Store<AppState> = inject(Store);
   private storeSub: Subscription;
 
-  constructor(private recipeService: RecipeService,
-              private activatedRoute: ActivatedRoute,
+  constructor(private activatedRoute: ActivatedRoute,
               private router: Router) {
   }
 
@@ -38,7 +36,6 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
         (params: Params) => {
           this.id = +params['id'];
           this.isEdit = params['id'] != null;
-          this.recipe = this.recipeService.getRecipeById(this.id);
           this.initForm();
         });
   }

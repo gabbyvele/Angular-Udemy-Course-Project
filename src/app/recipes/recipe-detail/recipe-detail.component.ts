@@ -1,6 +1,5 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {Recipe} from "../../model/recipe.model";
-import {RecipeService} from "../recipe.service";
 import {ActivatedRoute, Params, Router} from "@angular/router";
 import {Store} from "@ngrx/store";
 import {AppState} from "../../store/app.reducer";
@@ -19,8 +18,7 @@ export class RecipeDetailComponent implements OnInit {
   recipe: Recipe;
   private store: Store<AppState> = inject(Store);
 
-  constructor(private recipeService: RecipeService,
-              private router: Router,
+  constructor(private router: Router,
               private activatedRoute: ActivatedRoute) {
   }
 
